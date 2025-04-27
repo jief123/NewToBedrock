@@ -213,6 +213,6 @@ AWS SDK 提供了标准的错误处理机制。常见错误包括认证失败、
 
 - [AWS Bedrock 官方文档](https://docs.aws.amazon.com/bedrock/)
 - [Anthropic Claude 文档](https://docs.anthropic.com/claude/docs)
-- [AWS 实例程序](https://docs.aws.amazon.com/bedrock/latest/userguide/service_code_examples_bedrock-runtime_anthropic_claude.html)
+- [AWS 官方示例程序片段](https://docs.aws.amazon.com/bedrock/latest/userguide/service_code_examples_bedrock-runtime_anthropic_claude.html)
 
 祝您使用愉快！
