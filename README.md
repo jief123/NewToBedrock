@@ -37,9 +37,9 @@ flowchart TD
 从上图可以看出，访问 AWS Bedrock 的基本流程为：
 
 1. **获取访问凭证**：AWS 访问密钥（Access Key ID 和 Secret Access Key）
-2. **使用 AWS SDK**：通过各种编程语言的 SDK 进行调用
-3. **创建 Bedrock 客户端**：使用 SDK 创建专门的 Bedrock Runtime 客户端
-4. **调用 API**：使用 InvokeModel（单轮对话）或 Converse（多轮对话）API
+2. **使用 AWS SDK**：通过各种编程语言的 SDK 进行调用，例如Python需要boto3
+3. **创建 Bedrock 客户端**：代码中使用 SDK 创建专门的 Bedrock Runtime 客户端
+4. **调用 API**：使用 InvokeModel（原始接口，使用不同模型有参数的差异性，保持了原模型的使用风格）或 Converse（统一接口，统一了模型调用的传参）API
 5. **获取模型响应**：接收并处理 Claude 模型返回的结果
 
 ## 第一步：获取 AWS 访问凭证
@@ -150,90 +150,45 @@ conversation = converse_with_claude([
 print(conversation)
 ```
 
-### JavaScript 示例
-
-```javascript
-const { BedrockRuntimeClient, InvokeModelCommand, ConverseCommand } = require("@aws-sdk/client-bedrock-runtime");
-
-// 创建 Bedrock Runtime 客户端
-const bedrockRuntime = new BedrockRuntimeClient({ region: "us-west-2" });
-
-// 单轮对话：使用 InvokeModel API
-async function invokeModel(prompt) {
-    const params = {
-        modelId: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0', // Sonnet 3.5 v2
-        // 或使用 'us.anthropic.claude-3-7-sonnet-20250219-v1:0' 表示 Sonnet 3.7
-        body: JSON.stringify({
-            anthropic_version: "bedrock-2023-05-31",
-            max_tokens: 1000,
-            messages: [
-                { role: "user", content: prompt }
-            ]
-        })
-    };
-
-    const command = new InvokeModelCommand(params);
-    const response = await bedrockRuntime.send(command);
-    
-    const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-    return responseBody.content[0].text;
-}
-
-// 多轮对话：使用 Converse API
-async function converseWithModel(messages) {
-    const params = {
-        modelId: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0', // Sonnet 3.5 v2
-        // 或使用 'us.anthropic.claude-3-7-sonnet-20250219-v1:0' 表示 Sonnet 3.7
-        messages: messages
-    };
-
-    const command = new ConverseCommand(params);
-    const response = await bedrockRuntime.send(command);
-    
-    return response.output.message.content[0].text;
-}
-
-// 示例使用
-async function run() {
-    try {
-        const result = await invokeModel("解释量子计算的基本原理");
-        console.log(result);
-        
-        const conversation = await converseWithModel([
-            { role: "user", content: "你好，请介绍一下自己" },
-            { role: "assistant", content": "我是 Claude，一个由 Anthropic 创建的 AI 助手。我可以帮助回答问题、撰写内容、分析数据等。" },
-            { role: "user", content: "你能用 JavaScript 写一个简单的网页爬虫吗？" }
-        ]);
-        console.log(conversation);
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-run();
-```
-
 ## InvokeModel 与 Converse API 的区别
 
-1. **InvokeModel API**:
-   - 适用于单轮对话
-   - 每次调用都是独立的，不保留上下文
-   - 适合简单的文本生成任务
+invoke_model API:
 
-2. **Converse API**:
-   - 专为多轮对话设计
-   - 可以传递完整的对话历史
-   - 适合需要上下文理解的交互式应用
+- 是 Bedrock 的基础 API，用于直接调用任何支持的基础模型
 
-## Claude Sonnet 3.5 v2 与 Sonnet 3.7 的选择
+- 需要按照每个模型提供商的特定格式构造请求
 
-- **Claude Sonnet 3.5 v2** (modelId: `us.anthropic.claude-3-5-sonnet-20241022-v2:0`)
-  - 平衡了性能和成本
-  - 适合大多数一般应用场景
+- 提供对原始模型接口的直接访问
 
-- **Claude Sonnet 3.7** (modelId: `us.anthropic.claude-3-7-sonnet-20250219-v1:0`)
-  - 最新版本，性能略有提升
-  - 在某些特定任务上可能表现更好
+converse API:
+
+- 专门为对话应用场景设计的更高级别 API
+
+- 提供了统一的接口，简化了对话应用的开发
+
+- 标准化了不同模型的请求和响应格式
+
+
+对比inovk_model与Anthropic原生参数体：
+
+### 请求体参数比较
+
+| 参数 | Anthropic 原生 API | Bedrock invoke_model | 差异说明 |
+|------|-------------------|------------------------|---------|
+| 消息格式 | messages: [{"role": "user", "content": "..."}] | messages: [{"role": "user", "content": "..."}] | 完全相同 |
+| 最大令牌数 | max_tokens: 1000 | max_tokens: 1000 | 完全相同 |
+| 温度 | temperature: 0.7 | temperature: 0.7 | 完全相同 |
+| 采样概率 | top_p: 0.9 | top_p: 0.9 | 完全相同 |
+| 停止序列 | stop_sequences: ["Human:"] | stop_sequences: ["Human:"] | 完全相同 |
+| 系统提示 | system: "You are a helpful assistant" | system: "You are a helpful assistant" | 完全相同 |
+| 流式输出 | stream: true | 不在请求体中，使用单独的 API | Bedrock 使用不同的 API 进行流式输出 |
+| 模型指定 | model: "claude-3-5-sonnet-20241022" | 不在请求体中，而是通过 modelId 参数 | Bedrock 将模型指定移到了请求体外 |
+| API 版本 | 不在请求体中，而是通过 anthropic-version 请求头 | anthropic_version: "bedrock-2023-05-31" | Bedrock 将版本移到了请求体内 |
+| 元数据 | metadata: {...} | 不支持 | Anthropic 特有 |
+
+
+
+
 
 ## 常见问题解答
 
@@ -246,8 +201,6 @@ AWS SDK 提供了标准的错误处理机制。常见错误包括认证失败、
 ### 3. 有使用限制吗？
 是的，AWS Bedrock 有 API 调用频率和令牌使用量的限制。这些限制可以通过联系 AWS 支持来增加。
 
-### 4. 如何监控使用情况和成本？
-AWS 提供了 CloudWatch 服务来监控 API 调用和使用情况。您也可以在 AWS 控制台中查看 Bedrock 的使用情况和成本。
 
 ## 结论
 
@@ -259,6 +212,6 @@ AWS 提供了 CloudWatch 服务来监控 API 调用和使用情况。您也可�
 
 - [AWS Bedrock 官方文档](https://docs.aws.amazon.com/bedrock/)
 - [Anthropic Claude 文档](https://docs.anthropic.com/claude/docs)
-- [AWS SDK 文档](https://aws.amazon.com/tools/)
+- [AWS 实例程序]([https://aws.amazon.com/tools/](https://docs.aws.amazon.com/bedrock/latest/userguide/service_code_examples_bedrock-runtime_anthropic_claude.html))
 
 祝您使用愉快！
