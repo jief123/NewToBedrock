@@ -22,7 +22,8 @@ flowchart TD
     H --> I["AWS Bedrock Runtime API"]
     I --> J["InvokeModel API"] & K["Converse API"]
     J --> L["Claude 3.5 v2 Claude 3.7 Model ID:
-    us.anthropic.claude-3-5-sonnet-20241022-v2:0 / us.anthropic.claude-3-7-sonnet-20250219-v1:0"]
+    us.anthropic.claude-3-5-sonnet-20241022-v2:0
+    us.anthropic.claude-3-7-sonnet-20250219-v1:0"]
     K --> L
 
     style A fill:#f9d5e5,stroke:#333,stroke-width:2px
