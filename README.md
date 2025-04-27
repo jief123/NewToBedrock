@@ -170,7 +170,7 @@ converse API:
 - 标准化了不同模型的请求和响应格式
 
 
-对比inovk_model与Anthropic原生参数体：
+对比Claude在invoke_model与Anthropic原生参数体：
 
 ### 请求体参数比较
 
