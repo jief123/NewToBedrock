@@ -10,8 +10,30 @@ Amazon Bedrock 是 AWS 提供的一项完全托管的服务，让您能够通过
 
 ## 访问流程概述
 
-![AWS Bedrock 访问流程](https://mermaid-diagram-placeholder.com)
+```mermaid
+flowchart TD
+    A["Developer/Application"] --> B["AWS Access Keys"]
+    B --> C["AWS SDK"]
+    C --> D["AWS SDK for Python/Boto3"] & E["AWS SDK for JavaScript"] & F["AWS SDK for Java"] & G["Other AWS SDKs"]
+    D --> H["AWS Bedrock Runtime Client"]
+    E --> H
+    F --> H
+    G --> H
+    H --> I["AWS Bedrock Runtime API"]
+    I --> J["InvokeModel API"] & K["Converse API"]
+    J --> L["Claude 3.5 v2 Claude 3.7 Model ID:
+    us.anthropic.claude-3-5-sonnet-20241022-v2:0 / us.anthropic.claude-3-7-sonnet-20250219-v1:0"]
+    K --> L
 
+    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style B fill:#d5e5f9,stroke:#333,stroke-width:2px
+    style H fill:#d5f9e5,stroke:#333,stroke-width:2px
+    style I fill:#ffe6cc,stroke:#333,stroke-width:2px
+    style J fill:#e6d5f9,stroke:#333,stroke-width:2px
+    style K fill:#e6d5f9,stroke:#333,stroke-width:2px
+    style L fill:#f9e6d5,stroke:#333,stroke-width:2px
+
+```
 从上图可以看出，访问 AWS Bedrock 的基本流程为：
 
 1. **获取访问凭证**：AWS 访问密钥（Access Key ID 和 Secret Access Key）
@@ -64,7 +86,7 @@ npm install @aws-sdk/client-bedrock-runtime
 [default]
 aws_access_key_id = YOUR_ACCESS_KEY
 aws_secret_access_key = YOUR_SECRET_KEY
-region = us-east-1  # Bedrock 服务所在区域
+region = us-west-2  # Bedrock 服务所在区域
 ```
 
 ### 方法二：使用环境变量
@@ -72,7 +94,7 @@ region = us-east-1  # Bedrock 服务所在区域
 ```bash
 export AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY
 export AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
-export AWS_DEFAULT_REGION=us-east-1
+export AWS_DEFAULT_REGION=us-west-2
 ```
 
 ## 第四步：创建 Bedrock 客户端并调用模型
@@ -86,7 +108,7 @@ import json
 # 创建 Bedrock Runtime 客户端
 bedrock_runtime = boto3.client(
     service_name='bedrock-runtime',
-    region_name='us-east-1'
+    region_name='us-west-2'
 )
 
 # 单轮对话：使用 InvokeModel API
@@ -134,7 +156,7 @@ print(conversation)
 const { BedrockRuntimeClient, InvokeModelCommand, ConverseCommand } = require("@aws-sdk/client-bedrock-runtime");
 
 // 创建 Bedrock Runtime 客户端
-const bedrockRuntime = new BedrockRuntimeClient({ region: "us-east-1" });
+const bedrockRuntime = new BedrockRuntimeClient({ region: "us-west-2" });
 
 // 单轮对话：使用 InvokeModel API
 async function invokeModel(prompt) {
