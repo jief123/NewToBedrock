@@ -79,16 +79,17 @@ npm install @aws-sdk/client-bedrock-runtime
 
 ## 第三步：配置 AWS 凭证
 
-### 方法一：使用配置文件（推荐）
+### 方法一：通过AWS CLI配置系统（推荐）
 
-创建 `~/.aws/credentials` 文件：
+安装https://docs.aws.amazon.com/zh_cn/cli/latest/userguide/getting-started-install.html
 
-```
-[default]
-aws_access_key_id = YOUR_ACCESS_KEY
-aws_secret_access_key = YOUR_SECRET_KEY
-region = us-west-2  # Bedrock 服务所在区域
-```
+运行aws configure:
+
+AWS Access Key ID [xxxxx]: xxxxx
+AWS Secret Access Key [xxxx]: xxxx
+Default region name [us-west-2]: us-west-2
+Default output format [text]: 
+
 
 ### 方法二：使用环境变量
 
