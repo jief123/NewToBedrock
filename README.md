@@ -84,7 +84,8 @@ npm install @aws-sdk/client-bedrock-runtime
 安装https://docs.aws.amazon.com/zh_cn/cli/latest/userguide/getting-started-install.html
 
 ```bash
-aws configure:
+aws configure
+
 AWS Access Key ID [xxxxx]: xxxxx
 AWS Secret Access Key [xxxx]: xxxx
 Default region name [us-west-2]: us-west-2
