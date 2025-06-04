@@ -1,14 +1,5 @@
 # AWS Bedrock 入门指南：面向不熟悉 AWS 的开发人员
 
-## MCP-on-AWS-Bedrock-hand 示例
-
-本仓库中的 `MCP-on-AWS-Bedrock-hand` 目录包含了一个简单明了的示例项目，展示如何在 AWS Bedrock 上实现和使用 Anthropic 的模型上下文协议（MCP）。该示例演示了如何通过 AWS Bedrock 的运行时服务与支持 MCP 的工具进行交互，包括：
-
-- **Converse API**：AWS Bedrock 提供的统一接口，提供与模型无关的 API 开发体验，让开发者可以使用相同的格式与不同的模型交互
-- **InvokeModel API**：提供与原始模型厂商兼容的 API 封装，保持与原始模型 API 的一致性，让开发者可以直接使用模型特定参数和格式
-
-更多详细信息，请参阅 [README_CN.md](./MCP-on-AWS-Bedrock-hand/README_CN.md) 文件。
-
 ## 简介
 
 本指南旨在帮助不熟悉 AWS 的开发人员快速上手 Amazon Bedrock，特别是使用 Claude Sonnet 3.5 v2 和 Sonnet 3.7 模型。无需深入了解 AWS 的复杂架构，您也能轻松集成这些强大的 AI 模型到您的应用中。
@@ -195,6 +186,14 @@ converse API:
 | 元数据 | metadata: {...} | 不支持 | Anthropic 特有 |
 
 
+## MCP-on-AWS-Bedrock-hand 示例
+
+本仓库中的 `MCP-on-AWS-Bedrock-hand` 目录包含了一个简单明了的示例项目，展示如何在 AWS Bedrock 上实现和使用 Anthropic 的模型上下文协议（MCP）。该示例演示了如何通过 AWS Bedrock 的运行时服务与支持 MCP 的工具进行交互，包括：
+
+- **Converse API**：AWS Bedrock 提供的统一接口，提供与模型无关的 API 开发体验，让开发者可以使用相同的格式与不同的模型交互
+- **InvokeModel API**：提供与原始模型厂商兼容的 API 封装，保持与原始模型 API 的一致性，让开发者可以直接使用模型特定参数和格式
+
+更多详细信息，请参阅 [README_CN.md](./MCP-on-AWS-Bedrock-hand/README_CN.md) 文件。
 
 
 
