@@ -73,8 +73,6 @@ python fetch_url_mcp_server.py --transport streamable-http --port 8080
 
 ## API 差异
 
-## API 差异
-
 ### Converse API
 - AWS Bedrock 提供的统一接口，提供与模型无关的 API 开发体验
 - 让开发者可以使用相同的格式与不同的模型交互
