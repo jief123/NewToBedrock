@@ -11,8 +11,12 @@ logger = logging.getLogger(__name__)
 
 def convert_tool_format(tools):
     """
-    Converts tools into the format required for the InvokeMethod API, which is same structure as Anthropic https://docs.anthropic.com/en/api/messages.
-
+    
+    Converts MCP tools into the format required for the InvokeMethod API, which is same structure as Anthropic https://docs.anthropic.com/en/api/messages.
+    • MCP tools use a format with name, description, and inputSchema properties
+    • Claude in Bedrock(Same as Anthropic) expects name, description, and input_schema 
+    • The structure of the schema itself is also different - Claude expects a specific format with type, properties, and required fields
+    
     Args:
         tools (list): List of tool objects
 
