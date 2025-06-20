@@ -112,7 +112,7 @@ bedrock_runtime = boto3.client(
     region_name='us-west-2'
 )
 
-# 单轮对话：使用 InvokeModel API
+# 调用模型原生形式接口：使用 InvokeModel API
 def invoke_claude(prompt):
     response = bedrock_runtime.invoke_model(
         modelId='us.anthropic.claude-3-5-sonnet-20241022-v2:0',  # Sonnet 3.5 v2
@@ -129,7 +129,7 @@ def invoke_claude(prompt):
     response_body = json.loads(response['body'].read())
     return response_body['content'][0]['text']
 
-# 多轮对话：使用 Converse API
+# 调用bedrock统一接口：使用 Converse API
 def converse_with_claude(messages):
     response = bedrock_runtime.converse(
         modelId='us.anthropic.claude-3-5-sonnet-20241022-v2:0',  # Sonnet 3.5 v2
